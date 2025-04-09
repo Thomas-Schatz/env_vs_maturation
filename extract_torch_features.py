@@ -33,7 +33,9 @@ def extract_feats(feats_type, wav_list, target_h5f_file):
     get_feats = feats[feats_type]
     wavs = parse_wav_list(wav_list)  # wav_id: wav_path dict
     with h5features.Writer(target_h5f_file) as writer:
-        for wav_id in wavs:
+        N = len(wavs)
+        for i, wav_id in enumerate(wavs):
+            print(f"Processing wavefile {i+1}/{N}")
             features = get_feats(wavs[wav_id])
             # Convert from torch to numpy for h5py
             features = features.numpy()
