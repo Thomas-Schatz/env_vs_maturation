@@ -28,7 +28,7 @@ def parse_wav_list(wav_list):
         return {a: b for a, b in tokens}
 
 
-def extract_feats(feats_type, wav_list, target_h5f_file):
+def extract_feats(feats_type, wav_list, target_h5f_file, out_type=float):
     # might be slow for large number of small waveforms
     get_feats = feats[feats_type]
     wavs = parse_wav_list(wav_list)  # wav_id: wav_path dict
@@ -38,7 +38,7 @@ def extract_feats(feats_type, wav_list, target_h5f_file):
             print(f"Processing wavefile {i+1}/{N}")
             features = get_feats(wavs[wav_id])
             # Convert from torch to numpy for h5py
-            features = features.numpy()
+            features = features.numpy().astype(out_type)
             utt_ids = [wav_id]
             times = [0.0125 + 0.01*np.arange(len(features))]
             features = [features]
